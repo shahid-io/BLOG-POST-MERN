@@ -27,7 +27,7 @@ const Posts = () => {
             description={post.description}
           ></PostCard>
         ))}
-        <button onClick={() => navigate(-1)}>Back</button>
+        <button onClick={() => navigate(-1)} className="btn btn-outline-warning">Back</button>
       </div>
     </div>
   );

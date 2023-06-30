@@ -14,6 +14,8 @@
 }
 
 .post-card:hover{
-    background-color: #555;
-    color: white;
+    background-color: #f0f0f0;
+    color: green;
+    border-radius: 5px;
+    outline-offset: 3px;
 }

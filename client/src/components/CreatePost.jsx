@@ -1,29 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import "../styles/CreatePost.css";
 import { useNavigate } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import axios from "axios";
 
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+
 const CreatePost = () => {
   const navigate = useNavigate();
-  const [post, setPost] = useState({
-    title: "",
-    description: "",
-  });
-  const handleInput = (event) => {
-    const { name, value } = event.target;
 
-    setPost((prev) => {
-      return { ...prev, [name]: value };
-    });
-  };
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const handleSubmit = async (values) => {
     try {
-      /** axios */
-      const res = await axios.post("/create", post);
+      const res = await axios.post("/create", values);
       console.log(res);
       navigate("/posts");
     } catch (err) {
@@ -31,47 +20,62 @@ const CreatePost = () => {
     }
   };
 
-  /** useEffect for debug */
-  //   useEffect(() => {
-  //     console.log(post);
-  //   }, [post]);
+  const validationSchema = Yup.object().shape({
+    title: Yup.string().required("Title is required"),
+    description: Yup.string().required("Description is required"),
+  });
+
   return (
     <div className="post-wrapper">
       <h1>Blog Page</h1>
-      <Form>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Title</Form.Label>
-          <Form.Control
-            name="title"
-            type="text"
-            value={post.title}
-            placeholder="Title"
-            onChange={handleInput}
-            required
-          />
-        </Form.Group>
+      <Formik
+        initialValues={{ title: "", description: "" }}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ errors, touched }) => (
+          <Form>
+            <div className="mb-3">
+              <label htmlFor="title">Title</label>
+              <Field
+                type="text"
+                id="title"
+                name="title"
+                className="form-control"
+              />
+              <ErrorMessage
+                name="title"
+                component="div"
+                className="text-danger"
+              />
+            </div>
 
-        <Form.Group className="mb-3" controlId="description">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            name="description"
-            className="h-30"
-            type="text"
-            value={post.description}
-            placeholder="Description"
-            onChange={handleInput}
-            required
-          />
-        </Form.Group>
-        <Button
-          variant="outline-success"
-          type="submit"
-          className="mb-2 w-100"
-          onClick={handleSubmit}
-        >
-          Create
-        </Button>
-      </Form>
+            <div className="mb-3">
+              <label htmlFor="description">Description</label>
+              <Field
+                as="textarea"
+                id="description"
+                name="description"
+                className="form-control"
+              />
+              <ErrorMessage
+                name="description"
+                component="div"
+                className="text-danger"
+              />
+            </div>
+
+            <Button
+              variant="outline-success"
+              type="submit"
+              className="mb-2 w-100"
+            >
+              Create
+            </Button>
+          </Form>
+        )}
+      </Formik>
+
       <Button
         type="submit"
         variant="outline-dark"
