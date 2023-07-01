@@ -17,6 +17,15 @@ const Posts = () => {
     };
     fetchPosts();
   }, []);
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`/posts/${id}`);
+      setPosts(posts.filter((post) => post._id !== id));
+    } catch (error) {
+      console.log("Error while deleting post");
+    }
+  };
+
   return (
     <div className="post-container text-center container">
       <div className="card p-3">
@@ -25,9 +34,15 @@ const Posts = () => {
             key={posts._id}
             title={post.title}
             description={post.description}
+            deletePost={() => handleDelete(post._id)}
           ></PostCard>
         ))}
-        <button onClick={() => navigate(-1)} className="btn btn-outline-warning">Back</button>
+        <button
+          onClick={() => navigate(-1)}
+          className="btn btn-outline-warning"
+        >
+          Back
+        </button>
       </div>
     </div>
   );

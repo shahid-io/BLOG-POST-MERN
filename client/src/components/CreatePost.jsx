@@ -82,7 +82,14 @@ const CreatePost = () => {
         className="w-100"
         onClick={() => navigate(-1)}
       >
-        BACK
+        Home
+      </Button>
+      <Button
+        variant="outline-dark"
+        className="w-100 mt-2"
+        onClick={() => navigate("/posts")}
+      >
+        See Posts
       </Button>
     </div>
   );
