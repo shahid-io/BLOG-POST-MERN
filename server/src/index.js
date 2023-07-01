@@ -52,6 +52,23 @@ app.delete("/posts/:id", async (req, res) => {
   }
 });
 
+/** update post */
+/** update post */
+app.patch("/post/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedPostData = req.body;
+    
+    const updatedPost = await PostModel.findByIdAndUpdate(id, updatedPostData, {
+      new: true,
+    });
+    res.json(updatedPost);
+  } catch (error) {
+    console.log("Error while updating post", error);
+    res.status(500).json({ error: "Error while updating post" });
+  }
+});
+
 /** server setup */
 /** server start listening when the mongoose gets connected */
 connect()

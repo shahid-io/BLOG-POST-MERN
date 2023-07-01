@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import PostCard from "./PostCard";
 import { useNavigate } from "react-router-dom";
+
 const Posts = () => {
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -17,6 +19,7 @@ const Posts = () => {
     };
     fetchPosts();
   }, []);
+
   const handleDelete = async (id) => {
     try {
       await axios.delete(`/posts/${id}`);
@@ -26,15 +29,28 @@ const Posts = () => {
     }
   };
 
+  const handleUpdate = async (id, updatedPost) => {
+    try {
+      await axios.patch(`/post/${id}`, updatedPost);
+      const updatedPosts = posts.map((post) =>
+        post._id === id ? { ...post, ...updatedPost } : post
+      );
+      setPosts(updatedPosts);
+    } catch (error) {
+      console.log("Error while updating post");
+    }
+  };
+
   return (
     <div className="post-container text-center container">
       <div className="card p-3">
         {posts.map((post) => (
           <PostCard
-            key={posts._id}
+            key={post._id}
             title={post.title}
             description={post.description}
             deletePost={() => handleDelete(post._id)}
+            updatePost={(updatedPost) => handleUpdate(post._id, updatedPost)}
           ></PostCard>
         ))}
         <button
