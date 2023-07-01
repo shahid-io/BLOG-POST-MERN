@@ -57,6 +57,18 @@ const PostCard = (props) => {
 
       <Modal show={showModal} onHide={handleCloseModal}>
         {/* Modal content */}
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this post?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-secondary" onClick={handleCloseModal}>
+            Cancel
+          </Button>
+          <Button variant="outline-danger" onClick={handleDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
       </Modal>
 
       <Modal show={showUpdateModal} onHide={handleCloseUpdateModal}>
